@@ -4,6 +4,9 @@
 
 from beem.comment import Comment
 from beem.account import Account
+from beem import Hive
+from beem.nodelist import NodeList
+from beem.instance import set_shared_blockchain_instance
 from beem.utils import formatTimeString, construct_authorperm, resolve_authorperm, seperate_yaml_dict_from_body, derive_permlink
 import os
 import filecmp
@@ -20,7 +23,7 @@ class MainWindow:
         self.main_window = Tk()
         self.main_window.title('HiveDiff')
         self.__main_window_ui = MainWindowUI(self.main_window)
-
+        
         self.leftFile = ''
         self.rightFile = ''
         self.authorperm = ''
@@ -55,6 +58,10 @@ class MainWindow:
             ])
         self.__main_window_ui.fileTreeView.bind('<<TreeviewSelect>>', lambda *x:self.treeViewItemSelected())
 
+        nodelist = NodeList()
+        nodelist.update_nodes()
+        hive = Hive(node=nodelist.get_hive_nodes())
+        set_shared_blockchain_instance(hive)
 
         self.leftFile = ''
         self.rightFile = file if file else ''
