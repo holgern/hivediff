@@ -56,8 +56,8 @@ class MainWindow:
         self.__main_window_ui.fileTreeView.bind('<<TreeviewSelect>>', lambda *x:self.treeViewItemSelected())
 
 
-        self.leftFile = file if file else ''
-        self.rightFile = ''
+        self.leftFile = ''
+        self.rightFile = file if file else ''
         self.filesChanged()
         if authorperm != '' and authorperm is not None:
             self.authorperm = authorperm
@@ -220,20 +220,20 @@ class MainWindow:
         self.__main_window_ui.leftLinenumbers.grid_remove()
         self.__main_window_ui.rightLinenumbers.grid_remove()
 
-        if not self.leftFile or not self.leftFile:
+        if not self.rightFile or not self.rightFile:
             self.__main_window_ui.leftFileTextArea.config(background=self.__main_window_ui.grayColor)
             self.__main_window_ui.rightFileTextArea.config(background=self.__main_window_ui.grayColor)
             return
 
-        if os.path.exists(self.leftFile):
-            self.__main_window_ui.leftFileLabel.config(text=self.leftFile)
+        if os.path.exists(self.rightFile):
+            self.__main_window_ui.leftFileLabel.config(text=self.rightFile)
             self.__main_window_ui.leftFileTextArea.config(background=self.__main_window_ui.whiteColor)
             self.__main_window_ui.leftLinenumbers.grid()
         else:
             self.__main_window_ui.leftFileLabel.config(text='')
 
-        if os.path.exists(self.leftFile):
-            self.__main_window_ui.rightFileLabel.config(text=self.leftFile)
+        if os.path.exists(self.rightFile):
+            self.__main_window_ui.rightFileLabel.config(text=self.rightFile)
             self.__main_window_ui.rightFileTextArea.config(background=self.__main_window_ui.whiteColor)
             self.__main_window_ui.rightLinenumbers.grid()
         else:
@@ -280,23 +280,23 @@ class MainWindow:
     # Insert file contents into text areas and highlight differences
     def diff_files_into_text_areas(self):
         try:
-            content = open(self.leftFile, "r", encoding="utf8").read()
+            content = open(self.rightFile, "r", encoding="utf8").read()
         except Exception as e:
-            showerror("Unable to read " + self.leftFile, str(e))
+            showerror("Unable to read " + self.rightFile, str(e))
             content = ''
 
-        leftFileContents, parameter = seperate_yaml_dict_from_body(content)        
+        rightFileContents, parameter = seperate_yaml_dict_from_body(content)        
         
         if "permlink" in parameter:
             authorperm = construct_authorperm(parameter["author"], parameter["permlink"])
         else:
             authorperm = construct_authorperm(parameter["author"], derive_permlink(parameter["title"], with_suffix=False))
-        self.__main_window_ui.rightFileLabel.config(text=authorperm)        
+        self.__main_window_ui.leftFileLabel.config(text=authorperm)        
         try:
             comment = Comment(authorperm)
-            rightFileContents = comment.body
+            leftFileContents = comment.body
         except:
-            rightFileContents = ''
+            leftFileContents = ''
         self.show_content(leftFileContents, rightFileContents)
 
     def show_content(self, leftFileContents, rightFileContents):
