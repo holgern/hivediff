@@ -34,9 +34,9 @@ class MainWindow:
         self.__main_window_ui.create_file_treeview()
         path_to_my_project = os.getcwd()
         self.__main_window_ui.add_menu('File', [
-            {'name': 'Compare Post', 'command': self.__browse_files},
-            {'name': 'Post history', 'command': self.__enter_post},
-            {'name': 'Compare Posts in Directory', 'command': self.__browse_directories},
+            {'name': 'Compare Markdown file', 'command': self.__browse_files},
+            {'name': 'View Post history', 'command': self.__enter_post},
+            {'name': 'Compare Markdown files in Directory', 'command': self.__browse_directories},
             {'name': 'Reload', 'command': self.__reload, 'accelerator': 'Ctrl+R'},
             {'separator'},
             {'name': 'Exit', 'command': self.__exit, 'accelerator': 'Alt+F4'}
